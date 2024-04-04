@@ -955,6 +955,18 @@ class WaveFunction:
                     tol=tol,
                     callback=print_progress_,
                 )
+            elif ansatz_optimizer.lower() == "rotosolve-ls":
+                print_progress_ = partial(
+                    print_progress, energy_func=energy_theta, silent=is_silent_subiterations
+                )
+                optimizer = RotoSolve(
+                    self.QI.grad_param_R,
+                    self.QI.param_names,
+                    maxiter=maxiter,
+                    tol=tol,
+                    callback=print_progress_,
+                    line_search=True,
+                )
             elif ansatz_optimizer.lower() == "spsa":
                 print("WARNING: Convergence tolerence cannot be set for SPSA; using qiskit default")
                 print_progress_SPSA_ = partial(print_progress_SPSA, silent=is_silent_subiterations)
